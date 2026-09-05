@@ -218,7 +218,3 @@ npm install
 ```bash
 dotnet outdated -u
 ```
-
-## Contributing
-
-Issues and pull requests are welcome. Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`, `test:`, `refactor:`), which the Husky commit hook enforces.
