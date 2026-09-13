@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking Microservices — flight booking as .NET 10 microservices</title>
+<meta name="description" content="A flight-booking system built as independent .NET 10 services: Vertical Slice Architecture, DDD, CQRS, Event Sourcing, gRPC, RabbitMQ with durable inbox/outbox, PostgreSQL, MongoDB and .NET Aspire.">
+<meta property="og:title" content="Booking Microservices — flight booking as .NET 10 microservices">
+<meta property="og:description" content="Four services, each with its own database. Commands write to PostgreSQL or EventStoreDB, events flow through RabbitMQ, queries read from MongoDB. Runs locally with one command.">
+<meta property="og:image" content="https://evangelosvlachos96-dotcom.github.io/booking-microservices/img/booking-microservices.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --board:#e9edf1; --paper:#fff; --ink:#1b2733; --muted:#5d6c7b; --rule:#cfd6dd;
+    --accent:#6b4fbb;
+  }
+  * { box-sizing:border-box }
+  body { margin:0; font-family:"Public Sans","Segoe UI",system-ui,sans-serif; color:var(--ink); background:var(--board); line-height:1.5 }
+  a { color:var(--accent) }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 1.5rem }
+  header { background:var(--paper); border-top:4px solid var(--accent); border-bottom:1px solid var(--rule) }
+  header .wrap { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem }
+  header b { font-size:1.05rem }
+  nav a { margin-left:1.25rem; color:var(--muted); text-decoration:none; font-size:.95rem }
+  nav a:hover { color:var(--ink) }
+  .hero { padding:3.5rem 0 2.5rem }
+  .hero h1 { font-size:clamp(2rem,4.5vw,3rem); line-height:1.1; margin:0 0 1rem; letter-spacing:-.01em; max-width:16ch }
+  .hero p { font-size:1.15rem; color:var(--muted); max-width:52ch; margin:0 0 1.75rem }
+  .cta { display:inline-flex; gap:.75rem; flex-wrap:wrap }
+  .btn { display:inline-block; padding:.7rem 1.25rem; border-radius:6px; text-decoration:none; font-weight:500; border:1px solid var(--rule); background:var(--paper); color:var(--ink) }
+  .btn--primary { background:var(--accent); color:#fff; border-color:var(--accent) }
+  .btn:hover { border-color:var(--accent) }
+  .shot { background:var(--paper); border:1px solid var(--rule); border-radius:10px; overflow:hidden; box-shadow:0 12px 40px rgba(27,39,51,.12) }
+  .shot img { display:block; width:100% }
+  section { padding:3rem 0 }
+  section h2 { font-size:1.6rem; margin:0 0 .5rem }
+  section > .wrap > p.lead { color:var(--muted); max-width:60ch; margin:0 0 2rem }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.25rem }
+  .step { background:var(--paper); border:1px solid var(--rule); border-radius:8px; padding:1.25rem }
+  .step b { display:block; font-size:1.05rem; margin-bottom:.35rem }
+  .step p { margin:0; color:var(--muted) }
+  .step code, .feature code, .rules code, .lead code { background:var(--board); padding:.1em .35em; border-radius:3px; font-size:.9em }
+  .feature { display:grid; grid-template-columns:1fr 1.4fr; gap:2rem; align-items:center; margin-bottom:3rem }
+  .feature:nth-child(even) { grid-template-columns:1.4fr 1fr }
+  .feature:nth-child(even) .text { order:2 }
+  .feature.pair, .feature.pair:nth-child(even) { grid-template-columns:1fr 1fr; align-items:start }
+  .feature.pair .text { order:0 }
+  .feature h3 { margin:0 0 .5rem; font-size:1.25rem }
+  .feature p { margin:0; color:var(--muted) }
+  .legend { list-style:none; padding:0; margin:1rem 0 0; display:grid; gap:.4rem }
+  .legend li { padding-left:1rem; border-left:5px solid var(--accent) }
+  .rules { background:var(--paper); border:1px solid var(--rule); border-radius:8px; padding:1.5rem 1.75rem }
+  .rules ol { margin:.5rem 0 0; padding-left:1.25rem }
+  .rules li { margin:.35rem 0 }
+  .rules .note { margin-top:1rem; padding-top:1rem; border-top:1px solid var(--rule); color:var(--muted) }
+  .tablewrap { overflow-x:auto }
+  table { width:100%; border-collapse:collapse; background:var(--paper); border:1px solid var(--rule); font-size:.95rem }
+  th, td { text-align:left; padding:.6rem .9rem; border-bottom:1px solid var(--rule); white-space:nowrap }
+  td:nth-child(2) { white-space:normal }
+  th { background:var(--board); font-weight:600 }
+  tr:last-child td { border-bottom:0 }
+  pre { background:var(--ink); color:#dfe7ee; padding:1rem 1.25rem; border-radius:8px; overflow:auto; font-size:.9rem }
+  footer { border-top:1px solid var(--rule); padding:2rem 0; color:var(--muted); font-size:.9rem }
+  @media (max-width:760px) { .feature, .feature:nth-child(even), .feature.pair { grid-template-columns:1fr } .feature:nth-child(even) .text { order:0 } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <b>Booking Microservices</b>
+    <nav>
+      <a href="#start">Start</a>
+      <a href="#how">How it works</a>
+      <a href="#services">Services</a>
+      <a href="https://github.com/evangelosvlachos96-dotcom/booking-microservices">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>A flight-booking system, built the way production microservices are.</h1>
+    <p>Four .NET 10 services — Identity, Flight, Passenger, Booking — each owning its data, talking over gRPC when a call must be synchronous and over RabbitMQ when it need not be. An API gateway in front, OpenTelemetry underneath. One command brings the whole thing up locally.</p>
+    <div class="cta">
+      <a class="btn btn--primary" href="https://github.com/evangelosvlachos96-dotcom/booking-microservices">View on GitHub</a>
+      <a class="btn" href="https://github.com/evangelosvlachos96-dotcom/booking-microservices#readme">Read the README</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:2.5rem">
+    <div class="shot"><img src="img/booking-microservices.png" alt="Architecture diagram: an ingress in front of Identity, Flight, Passenger and Booking services, each with Postgres or EventStore plus Mongo; a message processor with inbox, outbox and internal command processors; RabbitMQ, Redis and an OpenTelemetry collector feeding Elastic, Kibana, Loki, Prometheus, Grafana, Jaeger, Zipkin and Tempo"></div>
+  </div>
+</div>
+
+<section id="start">
+  <div class="wrap">
+    <h2>Start in three steps</h2>
+    <p class="lead">You need the .NET 10 SDK and Docker Desktop. Everything else runs in containers.</p>
+    <div class="steps">
+      <div class="step"><b>1 · Trust a dev certificate</b><p>So the containers can serve TLS: <code>dotnet dev-certs https -ep ~/.aspnet/https/aspnetapp.pfx -p password</code>, then <code>dotnet dev-certs https --trust</code>.</p></div>
+      <div class="step"><b>2 · Run with Aspire</b><p><code>aspire run</code> starts every service and its infrastructure. The dashboard with logs, traces and metrics is at <code>localhost:18888</code>.</p></div>
+      <div class="step"><b>3 · Call the API</b><p>Every service serves OpenAPI at <code>/swagger</code> and <code>/scalar/v1</code>. Open <code>booking.rest</code> in VS Code's REST Client to authenticate as <code>van1</code> and walk through a booking.</p></div>
+    </div>
+    <p class="lead" style="margin:2rem 0 .75rem">Prefer Docker Compose or Kubernetes? Both live in <code>deployments/</code>:</p>
+    <pre>docker-compose -f ./deployments/docker-compose/docker-compose.infrastructure.yaml up -d   # infrastructure only
+docker-compose -f ./deployments/docker-compose/docker-compose.yaml up -d                  # full stack
+
+kubectl apply -f ./deployments/kubernetes/booking-cert-manager.yml
+kubectl apply -f ./deployments/kubernetes/booking-microservices.yml</pre>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="lead">Each service is small on the outside and organised by feature on the inside.</p>
+
+    <div class="feature">
+      <div class="text">
+        <h3>One folder per use case</h3>
+        <p>Code is grouped by feature, not by layer. <code>Flights/Features/CreatingFlight/V1/</code> holds the endpoint, the command, its handler, the validator and the events it raises. A change to one use case touches one folder. MediatR runs a pipeline with validation and logging behaviours around every request.</p>
+      </div>
+      <div class="shot"><img src="img/vertical-slice-architecture.png" alt="Vertical slice architecture diagram: each request cuts through API, application and domain as one self-contained slice instead of crossing horizontal layers"></div>
+    </div>
+
+    <div class="feature pair">
+      <div class="text">
+        <h3>Write here, read there</h3>
+        <p>Commands change the write store: PostgreSQL for Flight, Passenger and Identity, EventStoreDB for Booking, which is fully event-sourced. Consumers project the resulting events into MongoDB read models. Queries only ever read MongoDB.</p>
+      </div>
+      <div class="text">
+        <h3>Messages that do not get lost</h3>
+        <p>Integration events leave through Wolverine's durable <b>outbox</b> to RabbitMQ (at-least-once delivery) and arrive through a durable <b>inbox</b> (idempotent, exactly-once processing). When Booking must confirm a flight or a passenger right now, it calls that service over <b>gRPC</b> instead.</p>
+      </div>
+    </div>
+
+    <div class="feature pair">
+      <div class="text">
+        <h3>One door in</h3>
+        <p>YARP is the public entry point and routes to the services. Duende IdentityServer issues OpenID Connect / OAuth2 tokens; the seeded users <code>van1</code> (admin) and <code>van2</code> (user) are enough to try every endpoint.</p>
+      </div>
+      <div class="text">
+        <h3>Tested at every level</h3>
+        <p>Unit tests with NSubstitute, integration and end-to-end tests that start PostgreSQL, MongoDB and RabbitMQ through Testcontainers, and consumer-driven contract tests with PactNet. <code>dotnet test</code> runs them all; Docker must be running.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <h2>The services</h2>
+    <p class="lead">Every service owns its data and exposes a small REST surface through minimal APIs.</p>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>Service</th><th>Responsibility</th><th>Write store</th><th>Read store</th></tr></thead>
+      <tbody>
+        <tr><td><b>Identity</b></td><td>Users, roles, tokens (IdentityServer)</td><td>PostgreSQL</td><td>—</td></tr>
+        <tr><td><b>Flight</b></td><td>Flights, airports, aircraft, seats</td><td>PostgreSQL</td><td>MongoDB</td></tr>
+        <tr><td><b>Passenger</b></td><td>Passenger profiles</td><td>PostgreSQL</td><td>MongoDB</td></tr>
+        <tr><td><b>Booking</b></td><td>Booking a seat on a flight for a passenger</td><td>EventStoreDB</td><td>MongoDB</td></tr>
+        <tr><td><b>ApiGateway</b></td><td>Single public entry point (YARP)</td><td>—</td><td>—</td></tr>
+        <tr><td><b>Aspire AppHost</b></td><td>Local orchestration and dashboard</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="rules" style="margin-top:2rem">
+      <b>Observability and hygiene out of the box</b>
+      <p class="note">Traces, metrics and logs leave every service through OpenTelemetry to a collector, then on to Jaeger, Prometheus, Grafana and Serilog with Kibana. Polly handles retries and circuit breaking; ASP.NET Core health checks report readiness. CSharpier, Husky and commitlint enforce formatting and Conventional Commits before each commit.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    .NET 10 · Minimal APIs · MediatR · Wolverine + RabbitMQ · gRPC · EF Core + PostgreSQL · MongoDB · EventStoreDB · Duende IdentityServer · YARP · OpenTelemetry · .NET Aspire · Docker · Kubernetes &nbsp;·&nbsp;
+    <a href="https://github.com/evangelosvlachos96-dotcom/booking-microservices">Source on GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
